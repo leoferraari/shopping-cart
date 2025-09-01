@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from 'react-toastify';
 
 export type CartItem = {
   id: number;
   name: string;
   price: number;
+  category: string
   quantity: number;
 };
 
@@ -16,20 +18,16 @@ type CartContextType = {
   total: number;
 };
 
-//prev = abbreviation for previous state
-
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  // Carregar do localStorage
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
     if (storedCart) setCart(JSON.parse(storedCart));
   }, []);
 
-  // Salvar no localStorage
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
@@ -42,17 +40,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p
         );
       }
+
       return [...prev, { ...item, quantity: 1 }];
     });
   };
 
-  const removeFromCart = (id: number) =>
-    setCart((prev) => prev.filter((p) => p.id !== id));
+  const removeFromCart = (id: number) =>    setCart((prev) => prev.filter((p) => p.id !== id));
 
-  const updateQuantity = (id: number, quantity: number) =>
+  const updateQuantity = (id: number, quantity: number) => {
+    if (quantity <= 0) return;
+  
     setCart((prev) =>
       prev.map((p) => (p.id === id ? { ...p, quantity } : p))
     );
+  };
 
   const clearCart = () => setCart([]);
 

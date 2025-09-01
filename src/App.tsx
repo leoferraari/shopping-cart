@@ -1,15 +1,42 @@
-import React from "react";
 import ProductList from "./components/ProductList";
 import Cart from "./components/Cart";
-import { CartProvider } from "./context/CartContext";
+import { useCart } from "./context/CartContext";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function App() {
+  const { cart } = useCart();
+
   return (
-    <CartProvider>
-      <div style={{ display: "flex", gap: "2rem" }}>
-        <ProductList />
-        <Cart />
+    <div className="flex flex-col bg-slate-300">
+      <div className="bg-slate-400 min-h-[4rem] flex items-center justify-center ">
+        <p>Adicione seus produtos ao carrinho!</p>
       </div>
-    </CartProvider>
+  
+      <div className="flex flex-col xl:flex-row flex-1">
+        <div className="w-full xl:w-[25%] "></div>
+        
+        <div className="w-full xl:w-[50%] ">
+          <ProductList />
+        </div>
+    
+        <AnimatePresence>
+          {cart.length > 0 && (
+            <motion.div
+              className="w-full xl:w-[25%] xl:pl-[1rem] xl:pr-[1rem] bg-slate-400 mt-4 xl:mt-0"
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              <Cart />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+  
+      <ToastContainer />
+  </div>
   );
 }

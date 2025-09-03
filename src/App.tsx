@@ -4,9 +4,14 @@ import { useCart } from "./context/CartContext";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect } from "react";
 
 export default function App() {
   const { cart } = useCart();
+
+  useEffect(() => {
+    document.title = "Shopping Cart";
+  }, []);
 
   return (
     <div className="flex flex-col bg-slate-300">

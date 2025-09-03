@@ -24,8 +24,11 @@ export default function ProductCart({ item }: ProductProps) {
 
             <div className="flex flex-col">
                 <p className="font-semibold text-gray-800 truncate ">{item.name}</p>
-                <p className="text-sm text-gray-500">
-                R$: {(item.price * item.quantity).toFixed(2)}
+                <p className="text-sm text-gray-700">
+                    R$:  {(item.price).toFixed(2)}
+                </p>
+                <p className="text-sm text-gray-900">
+                    R$: {(item.price * item.quantity).toFixed(2)}
                 </p>
             </div>
 
